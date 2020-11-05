@@ -3,13 +3,6 @@ from connexion import NoContent
 
 import requests
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from base import Base
-from dropship import DropShip
-from existing_customer import ExistingCustomer
-
 import json
 import os.path
 import datetime
