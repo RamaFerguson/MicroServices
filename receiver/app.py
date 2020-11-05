@@ -32,7 +32,7 @@ def order_existing_customer(body):
     producer = topic.get_sync_producer()
     msg = { "type": "existing_customer",
             "datetime" : datetime.datetime.now().strftime(
-            "%Y-%m-%dT:H:%M:%S"),
+            "%Y-%m-%dT%H:%M:%S"),
             "payload": body }
     msg_str = json.dumps(msg)
     producer.produce(msg_str.encode('utf-8'))
@@ -51,7 +51,7 @@ def order_new_location(body):
     producer = topic.get_sync_producer()
     msg = { "type": "dropship",
             "datetime" : datetime.datetime.now().strftime(
-            "%Y-%m-%dT:H:%M:%S"),
+            "%Y-%m-%dT%H:%M:%S"),
             "payload": body }
     msg_str = json.dumps(msg)
     producer.produce(msg_str.encode('utf-8'))
