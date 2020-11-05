@@ -8,9 +8,6 @@ import os.path
 import datetime
 from os import path
 
-import mysql.connector
-import pymysql
-
 import yaml
 import logging
 import logging.config
