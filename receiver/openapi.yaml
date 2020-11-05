@@ -1,0 +1,139 @@
+openapi: 3.0.0
+info:
+  description: This API receives orders from dropship businesses and individual customers.
+  version: "1.0.0"
+  title: Dropship API
+  contact:
+    email: rferguson55@my.bcit.com
+paths:
+  /orders/existing_customer:
+    post:
+      summary: order tires to a known customer and location
+      operationId: app.order_existing_customer
+      description: Adds an existing customer order to the system
+      responses:
+        '201':
+          description: order placed
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExistingCustomerOrder'
+        description: Existing customer order to add
+  /orders/dropship:
+    post:
+      summary: order tires to a new location
+      operationId: app.order_new_location
+      description: Adds a new lcoation dropship order to the system
+      responses:
+        '201':
+          description: order placed
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DropShipOrder'
+        description: New location dropship order to add
+        
+components:
+  schemas:
+    ExistingCustomerOrder:
+      type: object
+      required:
+        - order_id
+        - customer_id
+        - tire
+        - quantity
+        - timestamp
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        customer_id:
+          type: string
+          example: MA13542
+        tire:
+          $ref: '#/components/schemas/Tire'
+        quantity:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+
+    DropShipOrder:
+      required:
+        - order_id
+        - address
+        - tire
+        - quantity
+        - timestamp
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        address:
+          $ref: '#/components/schemas/Address'
+        tire:
+          $ref: '#/components/schemas/Tire'
+        quantity:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+      
+    Tire:
+      required:
+        - tire_sku
+        - tire_size
+      properties:
+        tire_sku:
+          type: string
+          example: 285-7516AMPCM2
+        tire_size:
+          type: string
+          format: tire-size
+          example: 285/75R16
+          
+    Address:
+      required:
+        - name
+        - address
+        - city
+        - state/province
+        - country
+        - postal/zipcode
+        
+      properties:
+        name:
+          type: string
+          example: John Doe
+        address:
+          type: string
+          example: 999 Barker Street
+        unit_no:
+          type: string
+          example: 45-9087
+        city:
+          type: string
+          example: Winnipeg
+        state/province:
+          type: string
+          example: Manitoba
+        country:
+          type: string
+          example: Canada
+        postal/zipcode:
+          type: string
+          example: N4B8X9
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/

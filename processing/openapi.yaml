@@ -1,0 +1,63 @@
+openapi: 3.0.0
+info:
+  description: This API provides event stats.
+  version: "1.0.0"
+  title: Stats API
+  contact:
+    email: rferguson55@my.bcit.com
+paths:
+  /stats:
+    get:
+      summary: gets event stats
+      operationId: app.get_stats
+      description: Gets existing customer orders and dropship orders processed statistics
+      responses:
+        '200':
+          description: Successfully returned a list of order events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/OrderStats'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    OrderStats:
+      type: object
+      required:
+        - num_orders
+        - max_existing_customer_orders
+        - num_dropship_orders
+        - max_existing_customer_quantity
+        - max_dropship_quantity
+      properties:
+        num_orders:
+          type: integer
+          example: 8
+        max_existing_customer_orders:
+          type: integer
+          example: 4
+        num_dropship_orders:
+          type: integer
+          example: 4
+        max_existing_customer_quantity:
+          type: integer
+          example: 4
+        max_dropship_quantity:
+          type: integer
+          example: 4
+    
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/

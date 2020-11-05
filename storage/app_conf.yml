@@ -1,0 +1,11 @@
+version: 1
+datastore:
+  user: root
+  password: "!we@Sddi))klm2"
+  hostname: kafka-microservice.westus2.cloudapp.azure.com
+  port: 3306
+  db: events
+events:
+  hostname: kafka-microservice.westus2.cloudapp.azure.com
+  port: 9092
+  topic: events

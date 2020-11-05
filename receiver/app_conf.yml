@@ -1,0 +1,9 @@
+version: 1
+dropship:
+  url: http://localhost:8090/orders/dropship
+existing_customer:
+  url: http://localhost:8090/orders/existing_customer
+events:
+  hostname: kafka-microservice.westus2.cloudapp.azure.com
+  port: 9092
+  topic: events
