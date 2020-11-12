@@ -70,7 +70,7 @@ def populate_stats():
 
             data["max_dropship_quantity"] = max_quant
     
-    existing_customer_response = requests.get(app_config["eventstore"]["url"]+"/orders/existing_customer", params={ "timestamp": current_datetime} )
+    existing_customer_response = requests.get(app_config["eventstore"]["url"]+"/orders/existing_customer", params={ "timestamp": data["timestamp"]} )
     if (existing_customer_response.status_code != 200):
         logger.error("%i code received", existing_customer_response.status_code)
     else:
