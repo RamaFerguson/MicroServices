@@ -42,9 +42,9 @@ topic = client.topics[app_config["events"]["topic"]]
 
 
 def order_existing_customer(body):
-    logger.info('Received event order_existing_customer request with a unique id of %s', body["order_id"])
+    # logger.info('Received event order_existing_customer request with a unique id of %s', body["order_id"])
     # logger.info("{}:{}".format(app_config["events"]["hostname"],app_config["events"]["port"]))
-    logger.info(topic)
+    # logger.info(topic)
     producer = topic.get_sync_producer()
     msg = { "type": "existing_customer",
             "datetime" : datetime.datetime.now().strftime(
@@ -59,7 +59,7 @@ def order_existing_customer(body):
 
 
 def order_new_location(body):
-    logger.info('Received event order_new_location request with a unique id of %s', body["order_id"])
+    # logger.info('Received event order_new_location request with a unique id of %s', body["order_id"])
     # logger.info("{}:{}".format(app_config["events"]["hostname"],app_config["events"]["port"]))
 
     producer = topic.get_sync_producer()
