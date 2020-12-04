@@ -182,9 +182,9 @@ def process_messages():
         logger.info("Message: %s" % msg)
         payload = msg["payload"]
         if msg["type"] == "existing_customer":
-            logger.info('Connecting to DB. Hostname: %s, Port:%i', app_config["datastore"]["hostname"], app_config["datastore"]["port"])
+            logger.info('Connecting to existing_customer. Hostname: %s, Port:%i', app_config["datastore"]["hostname"], app_config["datastore"]["port"])
             session = DB_SESSION()
-
+            logger.debug('Starting existing_customer connection')
             ec = ExistingCustomer(payload['order_id'],
                                 payload['customer_id'],
                                 payload['tire']['tire_sku'],
@@ -192,18 +192,20 @@ def process_messages():
                                 payload['timestamp'],
                                 payload['quantity']
                                 )
-
+            logger.debug('Adding existing_customer details')
             session.add(ec)
-
+            logger.debug('Committing existing_customer details')
             session.commit()
+            logger.debug('Closing existing_customer session')
             session.close()
 
             logger.debug('Stored event order_existing_customer request with a unique id of %s', payload["order_id"])
 
         elif msg["type"] == "dropship":
-            logger.info('Connecting to DB. Hostname: %s, Port:%i', app_config["datastore"]["hostname"], app_config["datastore"]["port"])
+            logger.info('Connecting to dropship. Hostname: %s, Port:%i', app_config["datastore"]["hostname"], app_config["datastore"]["port"])
             session = DB_SESSION()
 
+            logger.debug('Starting dropship connection')
             ds = DropShip(payload['order_id'],
                                 payload['address']['name'],
                                 payload['address']['address'],
@@ -217,10 +219,12 @@ def process_messages():
                                 payload['timestamp'],
                                 payload['quantity']
                                 )
-
+            logger.debug('Adding dropship details')    
             session.add(ds)
 
+            logger.debug('Committing dropship session')   
             session.commit()
+            logger.debug('Closing dropship session') 
             session.close()
             
             logger.debug('Stored event order_new_location request with a unique id of %s', payload["order_id"])
