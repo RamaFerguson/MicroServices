@@ -163,7 +163,6 @@ def update_events_log(body):
 
 def process_messages():
     """ Process event messages """
-    logger = logging.getLogger('basicLogger')
     logger.info('Processing messages')
     hostname = "%s:%d" % (app_config["events"]["hostname"],
                             app_config["events"]["port"])
