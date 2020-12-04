@@ -34,6 +34,7 @@ with open(log_conf_file, 'r') as f:
 
 logger = logging.getLogger('basicLogger')
 kafka_server = "{}:{}".format(app_config["events"]["hostname"],app_config["events"]["port"])
+client = KafkaClient(hosts=kafka_server)
 
 # logger.info("App Conf File: %s" % app_conf_file)
 # logger.info("Log Conf File: %s" % log_conf_file)
@@ -43,7 +44,6 @@ def order_existing_customer(body):
     logger.info('Received event order_existing_customer request with a unique id of %s', body["order_id"])
     # logger.info("{}:{}".format(app_config["events"]["hostname"],app_config["events"]["port"]))
 
-    client = KafkaClient(hosts=kafka_server)
     topic = client.topics[app_config["events"]["topic"]]
     producer = topic.get_sync_producer()
     msg = { "type": "existing_customer",
@@ -61,7 +61,7 @@ def order_existing_customer(body):
 def order_new_location(body):
     logger.info('Received event order_new_location request with a unique id of %s', body["order_id"])
     # logger.info("{}:{}".format(app_config["events"]["hostname"],app_config["events"]["port"]))
-    client = KafkaClient(hosts=kafka_server)
+
     topic = client.topics[app_config["events"]["topic"]]
     producer = topic.get_sync_producer()
     msg = { "type": "dropship",
