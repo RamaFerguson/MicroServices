@@ -111,7 +111,6 @@ def get_existing_customer_orders(timestamp):
     session = DB_SESSION()
     timestamp_datetime = datetime.datetime.strptime(
         timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    print(timestamp_datetime)
     readings = session.query(ExistingCustomer).filter(ExistingCustomer.date_created >=
                                                 timestamp_datetime)
     results_list = []
@@ -128,7 +127,6 @@ def get_dropship_orders(timestamp):
     session = DB_SESSION()    
     timestamp_datetime = datetime.datetime.strptime(
         timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    print(timestamp_datetime)
     readings = session.query(DropShip).filter(DropShip.date_created >=
                                                 timestamp_datetime)
     results_list = []
@@ -179,11 +177,12 @@ def process_messages():
     for msg in consumer:
         msg_str = msg.value.decode('utf-8')
         msg = json.loads(msg_str)
-        logger.info("Message: %s" % msg)
+        # logger.info("Message: %s" % msg)
         payload = msg["payload"]
+        session = DB_SESSION()
         if msg["type"] == "existing_customer":
             logger.info('Connecting to existing_customer. Hostname: %s, Port:%i', app_config["datastore"]["hostname"], app_config["datastore"]["port"])
-            session = DB_SESSION()
+
             logger.debug('Starting existing_customer connection')
             ec = ExistingCustomer(payload['order_id'],
                                 payload['customer_id'],
@@ -194,16 +193,11 @@ def process_messages():
                                 )
             logger.debug('Adding existing_customer details')
             session.add(ec)
-            logger.debug('Committing existing_customer details')
-            session.commit()
-            logger.debug('Closing existing_customer session')
-            session.close()
 
             logger.debug('Stored event order_existing_customer request with a unique id of %s', payload["order_id"])
 
         elif msg["type"] == "dropship":
             logger.info('Connecting to dropship. Hostname: %s, Port:%i', app_config["datastore"]["hostname"], app_config["datastore"]["port"])
-            session = DB_SESSION()
 
             logger.debug('Starting dropship connection')
             ds = DropShip(payload['order_id'],
@@ -221,14 +215,13 @@ def process_messages():
                                 )
             logger.debug('Adding dropship details')    
             session.add(ds)
-
-            logger.debug('Committing dropship session')   
-            session.commit()
-            logger.debug('Closing dropship session') 
-            session.close()
             
             logger.debug('Stored event order_new_location request with a unique id of %s', payload["order_id"])
             
+        logger.info('Committing messages')
+        session.commit()
+        logger.info('Closing session')
+        session.close()
         # Commit the new message as being read
         consumer.commit_offsets()
 
